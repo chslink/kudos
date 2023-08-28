@@ -6,6 +6,7 @@ import (
 )
 
 type Args struct {
+	*Session
 	MsgId  int
 	MsgReq interface{}
 }

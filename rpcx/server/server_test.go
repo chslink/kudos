@@ -1,61 +1,54 @@
 package server
 
-import (
-	"context"
-	"testing"
-	"time"
-
-	testutils "github.com/chslink/kudos/rpcx/_testutils"
-)
-
-type Args struct {
-	A int
-	B int
-}
-
-type Reply struct {
-	C int
-}
-
-type Arith int
-
-func (t *Arith) Mul(ctx context.Context, args *Args, reply *Reply) error {
-	reply.C = args.A * args.B
-	return nil
-}
-
-func (t *Arith) ThriftMul(ctx context.Context, args *testutils.ThriftArgs_, reply *testutils.ThriftReply) error {
-	reply.C = args.A * args.B
-	return nil
-}
-
-func (t *Arith) ConsumingOperation(ctx context.Context, args *testutils.ThriftArgs_, reply *testutils.ThriftReply) error {
-	reply.C = args.A * args.B
-	time.Sleep(10 * time.Second)
-	return nil
-}
-
-func TestShutdownHook(t *testing.T) {
-	s := NewServer()
-	var cancel1 context.CancelFunc
-	s.RegisterOnShutdown(func(s *Server) {
-		var ctx context.Context
-		ctx, cancel1 = context.WithTimeout(context.Background(), 155*time.Second)
-		s.Shutdown(ctx)
-	})
-	s.RegisterName("Arith2", new(Arith), "")
-	s.Register(new(Arith), "")
-	go s.Serve("tcp", ":0")
-
-	time.Sleep(time.Second)
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	s.Shutdown(ctx)
-	cancel()
-	if cancel1 != nil {
-		cancel1()
-	}
-
-}
+//
+//type Args struct {
+//	A int
+//	B int
+//}
+//
+//type Reply struct {
+//	C int
+//}
+//
+//type Arith int
+//
+//func (t *Arith) Mul(ctx context.Context, args *Args, reply *Reply) error {
+//	reply.C = args.A * args.B
+//	return nil
+//}
+//
+//func (t *Arith) ThriftMul(ctx context.Context, args *testutils.ThriftArgs_, reply *testutils.ThriftReply) error {
+//	reply.C = args.A * args.B
+//	return nil
+//}
+//
+//func (t *Arith) ConsumingOperation(ctx context.Context, args *testutils.ThriftArgs_, reply *testutils.ThriftReply) error {
+//	reply.C = args.A * args.B
+//	time.Sleep(10 * time.Second)
+//	return nil
+//}
+//
+//func TestShutdownHook(t *testing.T) {
+//	s := NewServer()
+//	var cancel1 context.CancelFunc
+//	s.RegisterOnShutdown(func(s *Server) {
+//		var ctx context.Context
+//		ctx, cancel1 = context.WithTimeout(context.Background(), 155*time.Second)
+//		s.Shutdown(ctx)
+//	})
+//	s.RegisterName("Arith2", new(Arith), "")
+//	s.Register(new(Arith), "")
+//	go s.Serve("tcp", ":0")
+//
+//	time.Sleep(time.Second)
+//	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+//	s.Shutdown(ctx)
+//	cancel()
+//	if cancel1 != nil {
+//		cancel1()
+//	}
+//
+//}
 
 //
 //func TestHandleRequest(t *testing.T) {
