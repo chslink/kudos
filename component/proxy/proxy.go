@@ -42,14 +42,16 @@ func NewProxy(opts ...Option) *Proxy {
 func (r *Proxy) OnInit(s component.ServerImpl) {
 	var d client.ServiceDiscovery
 	switch r.opts.RegistryType {
-	case "consul":
-		d, _ = client.NewConsulDiscovery(r.opts.BasePath, "", []string{r.opts.RegistryAddr}, nil)
-	case "etcd":
-		d, _ = client.NewEtcdDiscovery(r.opts.BasePath, "", []string{r.opts.RegistryAddr}, nil)
-	case "etcdv3":
-		d, _ = client.NewEtcdV3Discovery(r.opts.BasePath, "", []string{r.opts.RegistryAddr}, nil)
-	case "zookeeper":
-		d, _ = client.NewZookeeperDiscovery(r.opts.BasePath, "", []string{r.opts.RegistryAddr}, nil)
+	//case "consul":
+	//	d, _ = client.NewConsulDiscovery(r.opts.BasePath, "", []string{r.opts.RegistryAddr}, nil)
+	//case "etcd":
+	//	d, _ = client.NewEtcdDiscovery(r.opts.BasePath, "", []string{r.opts.RegistryAddr}, nil)
+	//case "etcdv3":
+	//	d, _ = client.NewEtcdV3Discovery(r.opts.BasePath, "", []string{r.opts.RegistryAddr}, nil)
+	//case "zookeeper":
+	//	d, _ = client.NewZookeeperDiscovery(r.opts.BasePath, "", []string{r.opts.RegistryAddr}, nil)
+	default:
+		d, _ = client.NewPeer2PeerDiscovery(r.opts.RegistryAddr, "")
 	}
 
 	var sm client.SelectMode

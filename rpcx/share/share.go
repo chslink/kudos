@@ -46,9 +46,9 @@ var Trace bool
 var Codecs = map[protocol.SerializeType]codec.Codec{
 	protocol.SerializeNone: &codec.ByteCodec{},
 	protocol.JSON:          &codec.JSONCodec{},
-	protocol.ProtoBuffer:   &codec.PBCodec{},
-	protocol.MsgPack:       &codec.MsgpackCodec{},
-	protocol.Thrift:        &codec.ThriftCodec{},
+	//protocol.ProtoBuffer:   &codec.PBCodec{},
+	//protocol.MsgPack:       &codec.MsgpackCodec{},
+	//protocol.Thrift:        &codec.ThriftCodec{},
 }
 
 // RegisterCodec register customized codec.

@@ -18,7 +18,6 @@ import (
 	"github.com/chslink/kudos/rpcx/log"
 	"github.com/chslink/kudos/rpcx/protocol"
 	"github.com/chslink/kudos/rpcx/share"
-	"github.com/juju/ratelimit"
 	"golang.org/x/sync/singleflight"
 )
 
@@ -950,7 +949,7 @@ func (c *xClient) SendFile(ctx context.Context, fileName string, rateInBytesPerS
 		return err
 	}
 
-	var tb *ratelimit.Bucket
+	//var tb *ratelimit.Bucket
 
 	//if rateInBytesPerSecond > 0 {
 	//	tb = ratelimit.NewBucketWithRate(float64(rateInBytesPerSecond), rateInBytesPerSecond)
@@ -962,9 +961,9 @@ loop:
 		select {
 		case <-ctx.Done():
 		default:
-			if tb != nil {
-				tb.Wait(FileTransferBufferSize)
-			}
+			//if tb != nil {
+			//	tb.Wait(FileTransferBufferSize)
+			//}
 			n, err := file.Read(sendBuffer)
 			if err != nil {
 				if err == io.EOF {

@@ -7,8 +7,6 @@ import (
 	"github.com/chslink/kudos/component"
 	"github.com/chslink/kudos/log"
 	"github.com/chslink/kudos/rpcx/server"
-	"github.com/chslink/kudos/rpcx/serverplugin"
-	"github.com/rcrowley/go-metrics"
 )
 
 type Remote struct {
@@ -63,38 +61,40 @@ func (r *Remote) addRegistryPlugin() {
 
 	var p RegisterPlugin
 	switch r.opts.RegistryType {
-	case "consul":
-		p = &serverplugin.ConsulRegisterPlugin{
-			ServiceAddress: "tcp@" + r.opts.Addr,
-			ConsulServers:  []string{r.opts.RegistryAddr},
-			BasePath:       r.opts.BasePath,
-			Metrics:        metrics.NewRegistry(),
-			UpdateInterval: time.Minute,
-		}
-	case "etcd":
-		p = &serverplugin.EtcdRegisterPlugin{
-			ServiceAddress: "tcp@" + r.opts.Addr,
-			EtcdServers:    []string{r.opts.RegistryAddr},
-			BasePath:       r.opts.BasePath,
-			Metrics:        metrics.NewRegistry(),
-			UpdateInterval: time.Minute,
-		}
-	case "etcdv3":
-		p = &serverplugin.EtcdV3RegisterPlugin{
-			ServiceAddress: "tcp@" + r.opts.Addr,
-			EtcdServers:    []string{r.opts.RegistryAddr},
-			BasePath:       r.opts.BasePath,
-			Metrics:        metrics.NewRegistry(),
-			UpdateInterval: time.Minute,
-		}
-	case "zookeeper":
-		p = &serverplugin.ZooKeeperRegisterPlugin{
-			ServiceAddress:   "tcp@" + r.opts.Addr,
-			ZooKeeperServers: []string{r.opts.RegistryAddr},
-			BasePath:         r.opts.BasePath,
-			Metrics:          metrics.NewRegistry(),
-			UpdateInterval:   time.Minute,
-		}
+	//case "consul":
+	//	p = &serverplugin.ConsulRegisterPlugin{
+	//		ServiceAddress: "tcp@" + r.opts.Addr,
+	//		ConsulServers:  []string{r.opts.RegistryAddr},
+	//		BasePath:       r.opts.BasePath,
+	//		Metrics:        metrics.NewRegistry(),
+	//		UpdateInterval: time.Minute,
+	//	}
+	//case "etcd":
+	//	p = &serverplugin.EtcdRegisterPlugin{
+	//		ServiceAddress: "tcp@" + r.opts.Addr,
+	//		EtcdServers:    []string{r.opts.RegistryAddr},
+	//		BasePath:       r.opts.BasePath,
+	//		Metrics:        metrics.NewRegistry(),
+	//		UpdateInterval: time.Minute,
+	//	}
+	//case "etcdv3":
+	//	p = &serverplugin.EtcdV3RegisterPlugin{
+	//		ServiceAddress: "tcp@" + r.opts.Addr,
+	//		EtcdServers:    []string{r.opts.RegistryAddr},
+	//		BasePath:       r.opts.BasePath,
+	//		Metrics:        metrics.NewRegistry(),
+	//		UpdateInterval: time.Minute,
+	//	}
+	//case "zookeeper":
+	//	p = &serverplugin.ZooKeeperRegisterPlugin{
+	//		ServiceAddress:   "tcp@" + r.opts.Addr,
+	//		ZooKeeperServers: []string{r.opts.RegistryAddr},
+	//		BasePath:         r.opts.BasePath,
+	//		Metrics:          metrics.NewRegistry(),
+	//		UpdateInterval:   time.Minute,
+	//	}
+	default:
+
 	}
 
 	err := p.Start()

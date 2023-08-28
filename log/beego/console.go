@@ -19,8 +19,6 @@ import (
 	"os"
 	"strings"
 	"time"
-
-	"github.com/shiena/ansicolor"
 )
 
 // brush is a color join function
@@ -56,7 +54,7 @@ type consoleWriter struct {
 // NewConsole create ConsoleWriter returning as LoggerInterface.
 func NewConsole() Logger {
 	cw := &consoleWriter{
-		lg:       newLogWriter(ansicolor.NewAnsiColorWriter(os.Stdout)),
+		lg:       newLogWriter(os.Stdout),
 		Level:    LevelDebug,
 		Colorful: true,
 	}

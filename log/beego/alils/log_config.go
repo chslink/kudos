@@ -32,11 +32,11 @@ type LogConfig struct {
 	CreateTime     uint32
 	LastModifyTime uint32
 
-	project *LogProject
+	//project *LogProject
 }
 
 // GetAppliedMachineGroup returns applied machine group of this config.
 func (c *LogConfig) GetAppliedMachineGroup(confName string) (groupNames []string, err error) {
-	groupNames, err = c.project.GetAppliedMachineGroups(c.Name)
+	//groupNames, err = c.project.GetAppliedMachineGroups(c.Name)
 	return
 }

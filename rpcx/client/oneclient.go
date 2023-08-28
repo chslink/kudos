@@ -2,6 +2,7 @@ package client
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"net"
@@ -10,7 +11,6 @@ import (
 	"github.com/chslink/kudos/rpcx/share"
 
 	"github.com/chslink/kudos/rpcx/protocol"
-	"github.com/hashicorp/go-multierror"
 )
 
 // OneClient wraps servicesPath and XClients.
@@ -343,7 +343,7 @@ func (c *OneClient) Close() error {
 	for _, v := range c.xclients {
 		err := v.Close()
 		if err != nil {
-			result = multierror.Append(result, err)
+			result = errors.Join(result, err)
 		}
 	}
 	c.mu.RUnlock()
