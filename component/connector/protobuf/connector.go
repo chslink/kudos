@@ -2,37 +2,37 @@ package protobuf
 
 import "C"
 import (
-	"github.com/kudoochui/kudos/component"
-	"github.com/kudoochui/kudos/component/connector"
-	"github.com/kudoochui/kudos/component/proxy"
-	"github.com/kudoochui/kudos/filter"
-	"github.com/kudoochui/kudos/log"
-	"github.com/kudoochui/kudos/network"
-	"github.com/kudoochui/kudos/rpc"
-	"github.com/kudoochui/kudos/service/codecService"
+	"github.com/chslink/kudos/component"
+	"github.com/chslink/kudos/component/connector"
+	"github.com/chslink/kudos/component/proxy"
+	"github.com/chslink/kudos/filter"
+	"github.com/chslink/kudos/log"
+	"github.com/chslink/kudos/network"
+	"github.com/chslink/kudos/rpc"
+	"github.com/chslink/kudos/service/codecService"
 )
 
-type Connector struct{
-	opts 			*Options
-	nodeId			string
-	sessions		*connector.SessionMap
-	sessionRemote	*connector.SessionRemote
-	channelRemote 	*connector.ChannelRemote
-	customerRoute 	rpc.CustomerRoute
+type Connector struct {
+	opts          *Options
+	nodeId        string
+	sessions      *connector.SessionMap
+	sessionRemote *connector.SessionRemote
+	channelRemote *connector.ChannelRemote
+	customerRoute rpc.CustomerRoute
 	//remote			*remote.Remote
-	proxy 			*proxy.Proxy
-	handlerFilter 	filter.Filter
-	connection 		connector.Connection
-	timers 			*connector.Timers
-	wsServer 		*network.WSServer
-	tcpServer 		*network.TCPServer
+	proxy         *proxy.Proxy
+	handlerFilter filter.Filter
+	connection    connector.Connection
+	timers        *connector.Timers
+	wsServer      *network.WSServer
+	tcpServer     *network.TCPServer
 }
 
-func NewConnector(opts ...Option) *Connector{
+func NewConnector(opts ...Option) *Connector {
 	options := newOptions(opts...)
 	c := &Connector{
-		opts:			options,
-		sessions:		 &connector.SessionMap{},
+		opts:     options,
+		sessions: &connector.SessionMap{},
 	}
 	c.sessionRemote = connector.NewSessionRemote(c)
 	c.channelRemote = connector.NewChannelRemote(c)
@@ -108,7 +108,7 @@ func (c *Connector) OnDestroy() {
 	}
 }
 
-func (c *Connector) Route(f rpc.CustomerRoute){
+func (c *Connector) Route(f rpc.CustomerRoute) {
 	c.customerRoute = f
 }
 
@@ -121,6 +121,6 @@ func (c *Connector) SetHandlerFilter(f filter.Filter) {
 	c.handlerFilter = f
 }
 
-func (c* Connector) GetSessionMap() *connector.SessionMap {
+func (c *Connector) GetSessionMap() *connector.SessionMap {
 	return c.sessions
 }

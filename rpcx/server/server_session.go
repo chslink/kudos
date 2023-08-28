@@ -2,32 +2,33 @@ package server
 
 import (
 	"context"
-	"github.com/kudoochui/kudos/rpc"
-	"github.com/kudoochui/kudos/rpcx/protocol"
-	"github.com/kudoochui/kudos/rpcx/share"
 	"net"
 	"sync/atomic"
 	"time"
+
+	"github.com/chslink/kudos/rpc"
+	"github.com/chslink/kudos/rpcx/protocol"
+	"github.com/chslink/kudos/rpcx/share"
 )
 
 type ServerSession struct {
-	nodeId	string
-	sessionId	int64
-	userId 		int64
+	nodeId    string
+	sessionId int64
+	userId    int64
 
-	settings	map[string]string
-	server 		*Server
-	conn 		net.Conn
-	agent 		*ConnAgent
+	settings map[string]string
+	server   *Server
+	conn     net.Conn
+	agent    *ConnAgent
 }
 
-func NewSessionFromRpc(nodeId string, sessionId int64, userId int64, agent *ConnAgent) *ServerSession  {
+func NewSessionFromRpc(nodeId string, sessionId int64, userId int64, agent *ConnAgent) *ServerSession {
 	return &ServerSession{
-		nodeId: nodeId,
+		nodeId:    nodeId,
 		sessionId: sessionId,
-		userId: userId,
+		userId:    userId,
 		settings:  map[string]string{},
-		agent: agent,
+		agent:     agent,
 	}
 }
 
@@ -53,7 +54,7 @@ func (s *ServerSession) SetUserId(userId int64) {
 
 func (s *ServerSession) SyncSettings(settings map[string]interface{}) {
 	_settings := make(map[string]string)
-	for k,v := range settings {
+	for k, v := range settings {
 		_settings[k] = v.(string)
 	}
 	s.settings = _settings
@@ -63,19 +64,18 @@ func (s *ServerSession) Bind(userId int64) {
 	s.userId = userId
 
 	args := &rpc.Args{
-		MsgReq:  userId,
+		MsgReq: userId,
 	}
 
-	s.sendMessage("SessionRemote","Bind", nil, args)
+	s.sendMessage("SessionRemote", "Bind", nil, args)
 }
 
 func (s *ServerSession) UnBind() {
 	s.userId = 0
 
-	args := &rpc.Args{
-	}
+	args := &rpc.Args{}
 
-	s.sendMessage("SessionRemote","UnBind", nil, args)
+	s.sendMessage("SessionRemote", "UnBind", nil, args)
 }
 
 func (s *ServerSession) Get(key string) string {
@@ -95,24 +95,24 @@ func (s *ServerSession) Remove(key string) {
 
 func (s *ServerSession) Clone() *ServerSession {
 	session := &ServerSession{
-		nodeId:   s.nodeId,
-		sessionId:  s.sessionId,
-		userId:     s.userId,
-		settings:   map[string]string{},
+		nodeId:    s.nodeId,
+		sessionId: s.sessionId,
+		userId:    s.userId,
+		settings:  map[string]string{},
 	}
 
-	for k,v := range s.settings {
+	for k, v := range s.settings {
 		session.settings[k] = v
 	}
 	return session
 }
 
 // synchronize setting with frontend session
-func (s *ServerSession) Push(){
+func (s *ServerSession) Push() {
 	args := &rpc.Args{
 		MsgReq: s.settings,
 	}
-	s.sendMessage("SessionRemote","Push", nil, args)
+	s.sendMessage("SessionRemote", "Push", nil, args)
 }
 
 func (s *ServerSession) Close(reason string) {
@@ -120,7 +120,7 @@ func (s *ServerSession) Close(reason string) {
 		MsgReq: reason,
 	}
 
-	s.sendMessage("SessionRemote","KickBySid", nil, args)
+	s.sendMessage("SessionRemote", "KickBySid", nil, args)
 }
 
 // Server push message

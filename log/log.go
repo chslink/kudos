@@ -1,8 +1,9 @@
 package log
 
 import (
-	beegolog "github.com/kudoochui/kudos/log/beego"
 	"sync"
+
+	beegolog "github.com/chslink/kudos/log/beego"
 )
 
 var beego *beegolog.BeeLogger
@@ -14,7 +15,6 @@ func LogBeego() *beegolog.BeeLogger {
 	})
 	return beego
 }
-
 
 // Emergency logs a message at emergency level.
 func Emergency(f interface{}, v ...interface{}) {

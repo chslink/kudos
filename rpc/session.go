@@ -1,36 +1,37 @@
 package rpc
 
 import (
-	"github.com/kudoochui/kudos/service/idService"
 	"sync"
+
+	"github.com/chslink/kudos/service/idService"
 )
 
 type Session struct {
-	NodeId	string
-	SessionId	int64
+	NodeId    string
+	SessionId int64
 
-	UserId 		int64
-	mu 	sync.RWMutex
-	Settings	map[string]string
+	UserId         int64
+	mu             sync.RWMutex
+	Settings       map[string]string
 	cachedSettings map[string]string
 }
 
-func NewSession(nodeId string) *Session  {
+func NewSession(nodeId string) *Session {
 	return &Session{
-		NodeId: nodeId,
-		SessionId: idService.GenerateID().Int64(),
-		Settings:  map[string]string{},
-		cachedSettings:  map[string]string{},
+		NodeId:         nodeId,
+		SessionId:      idService.GenerateID().Int64(),
+		Settings:       map[string]string{},
+		cachedSettings: map[string]string{},
 	}
 }
 
-func NewSessionFromRpc(nodeId string, sessionId int64, userId int64) *Session  {
+func NewSessionFromRpc(nodeId string, sessionId int64, userId int64) *Session {
 	return &Session{
-		NodeId: nodeId,
-		SessionId: sessionId,
-		UserId: userId,
-		Settings:  map[string]string{},
-		cachedSettings:  map[string]string{},
+		NodeId:         nodeId,
+		SessionId:      sessionId,
+		UserId:         userId,
+		Settings:       map[string]string{},
+		cachedSettings: map[string]string{},
 	}
 }
 
@@ -56,7 +57,7 @@ func (s *Session) SetUserId(userId int64) {
 
 func (s *Session) SyncSettings(settings map[string]interface{}) {
 	_settings := make(map[string]string)
-	for k,v := range settings {
+	for k, v := range settings {
 		_settings[k] = v.(string)
 	}
 	s.Settings = _settings
@@ -94,18 +95,18 @@ func (s *Session) RemoveCache(key string) {
 
 func (s *Session) Clone() *Session {
 	session := &Session{
-		NodeId:   s.NodeId,
-		SessionId:  s.SessionId,
-		UserId:     s.UserId,
-		Settings:   map[string]string{},
+		NodeId:         s.NodeId,
+		SessionId:      s.SessionId,
+		UserId:         s.UserId,
+		Settings:       map[string]string{},
 		cachedSettings: map[string]string{},
 	}
 
-	for k,v := range s.Settings {
+	for k, v := range s.Settings {
 		session.Settings[k] = v
 	}
 
-	for k,v := range s.cachedSettings {
+	for k, v := range s.cachedSettings {
 		session.cachedSettings[k] = v
 	}
 	return session

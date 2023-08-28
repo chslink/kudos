@@ -9,9 +9,9 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/chslink/kudos/rpcx/protocol"
+	"github.com/chslink/kudos/rpcx/share"
 	"github.com/rs/cors"
-	"github.com/kudoochui/kudos/rpcx/protocol"
-	"github.com/kudoochui/kudos/rpcx/share"
 )
 
 func (s *Server) jsonrpcHandler(w http.ResponseWriter, r *http.Request) {
@@ -205,12 +205,11 @@ func AllowAllCORSOptions() *CORSOptions {
 // SetCORS sets CORS options.
 // for example:
 //
-//    cors.Options{
-//    	AllowedOrigins:   []string{"foo.com"},
-//    	AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodDelete},
-//    	AllowCredentials: true,
-//    }
-//
+//	cors.Options{
+//		AllowedOrigins:   []string{"foo.com"},
+//		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodDelete},
+//		AllowCredentials: true,
+//	}
 func (s *Server) SetCORS(options *CORSOptions) {
 	s.corsOptions = options
 }

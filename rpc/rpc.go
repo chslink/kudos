@@ -1,12 +1,12 @@
 package rpc
 
 import (
-	"github.com/kudoochui/kudos/service/codecService"
+	"github.com/chslink/kudos/service/codecService"
 	"github.com/mitchellh/mapstructure"
 )
 
 type Args struct {
-	MsgId int
+	MsgId  int
 	MsgReq interface{}
 }
 
@@ -21,20 +21,19 @@ func (a *Args) GetObject(t interface{}) error {
 }
 
 type Reply struct {
-	Code 	int
-	ErrMsg 	string
+	Code    int
+	ErrMsg  string
 	MsgResp interface{}
 }
 
 // Group message request
 type ArgsGroup struct {
-	Route 	string
+	Route   string
 	Payload []byte
 }
 
 // Group message response
 type ReplyGroup struct {
-
 }
 
 // Route msg to the specified node

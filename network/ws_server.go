@@ -2,24 +2,25 @@ package network
 
 import (
 	"crypto/tls"
-	"github.com/gorilla/websocket"
 	"net"
 	"net/http"
-	"github.com/kudoochui/kudos/log"
 	"sync"
 	"time"
+
+	"github.com/chslink/kudos/log"
+	"github.com/gorilla/websocket"
 )
 
 type WSServer struct {
-	Addr            string
-	MaxConnNum      int
-	MaxMsgLen       uint32
-	HTTPTimeout     time.Duration
-	CertFile        string
-	KeyFile         string
-	NewAgent        func(*WSConn) Agent
-	ln              net.Listener
-	handler         *WSHandler
+	Addr        string
+	MaxConnNum  int
+	MaxMsgLen   uint32
+	HTTPTimeout time.Duration
+	CertFile    string
+	KeyFile     string
+	NewAgent    func(*WSConn) Agent
+	ln          net.Listener
+	handler     *WSHandler
 }
 
 type WSHandler struct {
@@ -113,10 +114,10 @@ func (server *WSServer) Start() {
 
 	server.ln = ln
 	server.handler = &WSHandler{
-		maxConnNum:      server.MaxConnNum,
-		maxMsgLen:       server.MaxMsgLen,
-		newAgent:        server.NewAgent,
-		conns:           make(WebsocketConnSet),
+		maxConnNum: server.MaxConnNum,
+		maxMsgLen:  server.MaxMsgLen,
+		newAgent:   server.NewAgent,
+		conns:      make(WebsocketConnSet),
 		upgrader: websocket.Upgrader{
 			HandshakeTimeout: server.HTTPTimeout,
 			CheckOrigin:      func(_ *http.Request) bool { return true },

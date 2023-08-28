@@ -21,7 +21,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/kudoochui/kudos/utils"
+	"github.com/chslink/kudos/utils"
 )
 
 var env *utils.BeeMap

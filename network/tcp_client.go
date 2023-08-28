@@ -2,9 +2,10 @@ package network
 
 import (
 	"net"
-	"github.com/kudoochui/kudos/log"
 	"sync"
 	"time"
+
+	"github.com/chslink/kudos/log"
 )
 
 type TCPClient struct {

@@ -1,9 +1,10 @@
 package config
 
 import (
-	"github.com/kudoochui/kudos/utils"
 	"os"
 	"path/filepath"
+
+	"github.com/chslink/kudos/utils"
 )
 
 const (
@@ -13,9 +14,9 @@ const (
 
 var (
 	appConfigProvider = "json"
-	AppPath string
-	WorkPath string
-	RunMode string
+	AppPath           string
+	WorkPath          string
+	RunMode           string
 )
 
 type AppConfig struct {
@@ -41,7 +42,7 @@ func init() {
 func NewAppConfig(filename string) (*AppConfig, error) {
 	appConfigPath := filepath.Join(WorkPath, "bin", "conf", filename)
 	if !utils.FileExists(appConfigPath) {
-		appConfigPath = filepath.Join(AppPath, "bin","conf", filename)
+		appConfigPath = filepath.Join(AppPath, "bin", "conf", filename)
 		if !utils.FileExists(appConfigPath) {
 			return &AppConfig{innerConfig: NewFakeConfig()}, nil
 		}

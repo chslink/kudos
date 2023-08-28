@@ -1,13 +1,14 @@
 package timers
 
 import (
-	"github.com/kudoochui/kudos/utils/timer"
 	"time"
+
+	"github.com/chslink/kudos/utils/timer"
 )
 
 type Timers struct {
-	opts		*Options
-	dispatcher  *timer.Dispatcher
+	opts       *Options
+	dispatcher *timer.Dispatcher
 }
 
 func NewTimer(opts ...Option) *Timers {

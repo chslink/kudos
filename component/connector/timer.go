@@ -1,19 +1,19 @@
 package connector
 
 import (
-	"github.com/kudoochui/kudos/utils/timer"
 	"sync"
 	"time"
+
+	"github.com/chslink/kudos/utils/timer"
 )
 
-
 type Timers struct {
-	dispatcher  *timer.Dispatcher
+	dispatcher         *timer.Dispatcher
 	timerDispatcherLen int
-	chanJob		chan *TimeJob
-	chanStop	chan *timer.Timer
-	closed 		bool
-	lock 		sync.RWMutex
+	chanJob            chan *TimeJob
+	chanStop           chan *timer.Timer
+	closed             bool
+	lock               sync.RWMutex
 }
 
 func NewTimer() *Timers {
@@ -26,9 +26,9 @@ func NewTimer() *Timers {
 }
 
 type TimeJob struct {
-	timeout 	time.Duration
+	timeout  time.Duration
 	cronExpr *timer.CronExpr
-	f 		func()
+	f        func()
 }
 
 func (t *Timers) RunTimer(closeSig chan bool) {
@@ -78,7 +78,7 @@ func (t *Timers) CronFunc(cronExpr *timer.CronExpr, cb func()) *timer.Cron {
 	return t.dispatcher.CronFunc(cronExpr, cb)
 }
 
-func (t *Timers) ClearTimeout(handler *timer.Timer){
+func (t *Timers) ClearTimeout(handler *timer.Timer) {
 	t.lock.RLock()
 	if t.closed {
 		t.lock.RUnlock()

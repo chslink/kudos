@@ -1,8 +1,8 @@
 package share
 
 import (
-	"github.com/kudoochui/kudos/rpcx/codec"
-	"github.com/kudoochui/kudos/rpcx/protocol"
+	"github.com/chslink/kudos/rpcx/codec"
+	"github.com/chslink/kudos/rpcx/protocol"
 )
 
 const (

@@ -7,9 +7,9 @@ import (
 	"reflect"
 	"sync"
 
-	"github.com/kudoochui/kudos/rpcx/log"
-	"github.com/kudoochui/kudos/rpcx/protocol"
-	"github.com/kudoochui/kudos/rpcx/share"
+	"github.com/chslink/kudos/rpcx/log"
+	"github.com/chslink/kudos/rpcx/protocol"
+	"github.com/chslink/kudos/rpcx/share"
 )
 
 // InprocessClient is a in-process client for test.

@@ -3,35 +3,36 @@ package pomelo
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/kudoochui/kudos/log"
-	"github.com/kudoochui/kudos/protocol/pomelo/message"
-	"github.com/kudoochui/kudos/protocol/pomelo/pkg"
-	"github.com/kudoochui/kudos/rpc"
-	"github.com/kudoochui/kudos/service/msgService"
-	"github.com/kudoochui/kudos/utils/timer"
 	"reflect"
 	"strings"
 	"time"
+
+	"github.com/chslink/kudos/log"
+	"github.com/chslink/kudos/protocol/pomelo/message"
+	"github.com/chslink/kudos/protocol/pomelo/pkg"
+	"github.com/chslink/kudos/rpc"
+	"github.com/chslink/kudos/service/msgService"
+	"github.com/chslink/kudos/utils/timer"
 )
 
 const (
-	CODE_OK = 200
-	CODE_USE_ERROR = 500
+	CODE_OK         = 200
+	CODE_USE_ERROR  = 500
 	CODE_OLD_CLIENT = 501
 )
 
 type agentHandler struct {
-	agent 	*agent
+	agent        *agent
 	timerHandler *timer.Timer
 }
 
 func NewAgentHandler(a *agent) *agentHandler {
-	return &agentHandler{agent:a}
+	return &agentHandler{agent: a}
 }
 
 func (h *agentHandler) Handle(buffer *bytes.Buffer) {
 	pkgType, body := pkg.Decode(buffer.Bytes())
- 	switch pkgType {
+	switch pkgType {
 	case pkg.TYPE_HANDSHAKE:
 		h.handleHandshake(pkgType, body)
 	case pkg.TYPE_HANDSHAKE_ACK:
@@ -65,7 +66,7 @@ func (h *agentHandler) handleHandshake(pkgType int, body []byte) {
 	sys["useDict"] = true
 	sys["dict"] = msgService.GetMsgService().GetMsgMap()
 
-	bin,_ := json.Marshal(res)
+	bin, _ := json.Marshal(res)
 	buffer := pkg.Encode(pkg.TYPE_HANDSHAKE, bin)
 	h.agent.Write(buffer)
 }
@@ -101,8 +102,8 @@ func (h *agentHandler) handleData(pkgType int, body []byte) {
 	}
 
 	args := &rpc.Args{
-		MsgId: msgId,
-		MsgReq:  data,
+		MsgId:  msgId,
+		MsgReq: data,
 	}
 
 	msgResp := reflect.New(msgInfo.MsgRespType.Elem()).Interface()
@@ -121,8 +122,8 @@ func (h *agentHandler) handleData(pkgType int, body []byte) {
 		if err != nil {
 			log.Error("customer route error: %v", err)
 			reply := &rpc.Reply{
-				Code:    CODE_USE_ERROR,
-				ErrMsg:  err.Error(),
+				Code:   CODE_USE_ERROR,
+				ErrMsg: err.Error(),
 			}
 			h.agent.WriteResponse(msgId, reply)
 			return
@@ -135,10 +136,10 @@ func (h *agentHandler) handleData(pkgType int, body []byte) {
 	//rpcClientService.GetRpcClientService().Go(nodeName, servicePath, serviceName, h.agent.session, args, msgResp, h.agent.chanRet)
 }
 
-func (h *agentHandler) processError(code int){
+func (h *agentHandler) processError(code int) {
 	r := make(map[string]int)
 	r["code"] = code
-	bin,_ := json.Marshal(r)
+	bin, _ := json.Marshal(r)
 	buffer := pkg.Encode(pkg.TYPE_HANDSHAKE, bin)
 	h.agent.Write(buffer)
 }

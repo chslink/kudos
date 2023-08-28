@@ -1,9 +1,10 @@
 package app
 
 import (
-	"github.com/kudoochui/kudos/log"
 	"os"
 	"os/signal"
+
+	"github.com/chslink/kudos/log"
 )
 
 func Run(servers ...Server) {

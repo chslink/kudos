@@ -1,13 +1,14 @@
 package log
 
 import (
-	logs "github.com/kudoochui/kudos/log/beego"
 	"testing"
+
+	logs "github.com/chslink/kudos/log/beego"
 )
 
-func TestLog(t *testing.T)  {
+func TestLog(t *testing.T) {
 	LogBeego().SetLogger("console")
-	LogBeego().SetLogger(logs.AdapterFile,`{"filename":"test.log"}`)
+	LogBeego().SetLogger(logs.AdapterFile, `{"filename":"test.log"}`)
 	LogBeego().EnableFuncCallDepth(true)
 	LogBeego().SetLogFuncCallDepth(3)
 	//LogBeego().Async()
@@ -18,6 +19,6 @@ func TestLog(t *testing.T)  {
 	Warning("json is a type of kv like", map[string]int{"key": 2016})
 	Error(1024, "is a very", "good game")
 	Critical("oh,crash")
-	Alert(1E3)
+	Alert(1e3)
 	Emergency(232.32342233)
 }

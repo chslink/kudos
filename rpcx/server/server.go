@@ -20,9 +20,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/kudoochui/kudos/rpcx/log"
-	"github.com/kudoochui/kudos/rpcx/protocol"
-	"github.com/kudoochui/kudos/rpcx/share"
+	"github.com/chslink/kudos/rpcx/log"
+	"github.com/chslink/kudos/rpcx/protocol"
+	"github.com/chslink/kudos/rpcx/share"
 )
 
 // ErrServerClosed is returned by the Server's Serve, ListenAndServe after a call to Shutdown or Close.
@@ -140,7 +140,7 @@ func (s *Server) ActiveClientConn() []net.Conn {
 // The client is designated by the conn.
 // conn can be gotten from context in services:
 //
-//   ctx.Value(RemoteConnContextKey)
+//	ctx.Value(RemoteConnContextKey)
 //
 // servicePath, serviceMethod, metadata can be set to zero values.
 func (s *Server) SendMessage(conn net.Conn, servicePath, serviceMethod string, metadata map[string]string, data []byte) error {

@@ -14,11 +14,11 @@ import (
 	"sync"
 	"time"
 
+	ex "github.com/chslink/kudos/rpcx/errors"
+	"github.com/chslink/kudos/rpcx/log"
+	"github.com/chslink/kudos/rpcx/protocol"
+	"github.com/chslink/kudos/rpcx/share"
 	"github.com/juju/ratelimit"
-	ex "github.com/kudoochui/kudos/rpcx/errors"
-	"github.com/kudoochui/kudos/rpcx/log"
-	"github.com/kudoochui/kudos/rpcx/protocol"
-	"github.com/kudoochui/kudos/rpcx/share"
 	"golang.org/x/sync/singleflight"
 )
 
@@ -46,10 +46,10 @@ type XClient interface {
 	ConfigGeoSelector(latitude, longitude float64)
 	Auth(auth string)
 
-	Go(ctx context.Context, servicePath,serviceMethod string, session protocol.ISession, args interface{}, reply interface{}, done chan *Call) (*Call, error)
-	Call(ctx context.Context, servicePath,serviceMethod string, session protocol.ISession, args interface{}, reply interface{}) error
-	Broadcast(ctx context.Context, servicePath,serviceMethod string, args interface{}, reply interface{}) error
-	Fork(ctx context.Context, servicePath,serviceMethod string, args interface{}, reply interface{}) error
+	Go(ctx context.Context, servicePath, serviceMethod string, session protocol.ISession, args interface{}, reply interface{}, done chan *Call) (*Call, error)
+	Call(ctx context.Context, servicePath, serviceMethod string, session protocol.ISession, args interface{}, reply interface{}) error
+	Broadcast(ctx context.Context, servicePath, serviceMethod string, args interface{}, reply interface{}) error
+	Fork(ctx context.Context, servicePath, serviceMethod string, args interface{}, reply interface{}) error
 	SendRaw(ctx context.Context, r *protocol.Message) (map[string]string, []byte, error)
 	SendFile(ctx context.Context, fileName string, rateInBytesPerSecond int64, meta map[string]string) error
 	DownloadFile(ctx context.Context, requestFileName string, saveTo io.Writer, meta map[string]string) error
@@ -83,7 +83,7 @@ type xClient struct {
 	selectMode   SelectMode
 	cachedClient map[string]RPCClient
 	breakers     sync.Map
-	nodeName  string
+	nodeName     string
 	option       Option
 
 	mu        sync.RWMutex
@@ -111,7 +111,7 @@ func NewXClient(nodeName string, failMode FailMode, selectMode SelectMode, disco
 		failMode:     failMode,
 		selectMode:   selectMode,
 		discovery:    discovery,
-		nodeName:  	nodeName,
+		nodeName:     nodeName,
 		cachedClient: make(map[string]RPCClient),
 		option:       option,
 	}
@@ -145,7 +145,7 @@ func NewBidirectionalXClient(nodeName string, failMode FailMode, selectMode Sele
 		failMode:          failMode,
 		selectMode:        selectMode,
 		discovery:         discovery,
-		nodeName:       nodeName,
+		nodeName:          nodeName,
 		cachedClient:      make(map[string]RPCClient),
 		option:            option,
 		serverMessageChan: serverMessageChan,
@@ -246,7 +246,7 @@ func (c *xClient) selectClient(ctx context.Context, servicePath, serviceMethod s
 		}
 		k = fn(ctx, servicePath, serviceMethod, args)
 		c.mu.Unlock()
-		session.SetCache(c.nodeName + "cachedServer", k)
+		session.SetCache(c.nodeName+"cachedServer", k)
 	}
 	if k == "" {
 		return "", nil, ErrXClientNoServer
@@ -436,7 +436,7 @@ func (c *xClient) Go(ctx context.Context, servicePath, serviceMethod string, ses
 
 // Call invokes the named function, waits for it to complete, and returns its error status.
 // It handles errors base on FailMode.
-func (c *xClient) Call(ctx context.Context, servicePath,serviceMethod string, session protocol.ISession, args interface{}, reply interface{}) error {
+func (c *xClient) Call(ctx context.Context, servicePath, serviceMethod string, session protocol.ISession, args interface{}, reply interface{}) error {
 	if c.isShutdown {
 		return ErrXClientShutdown
 	}
@@ -729,7 +729,7 @@ func (c *xClient) SendRaw(ctx context.Context, r *protocol.Message) (map[string]
 	}
 }
 
-func (c *xClient) wrapCall(ctx context.Context, client RPCClient, servicePath,serviceMethod string, session protocol.ISession, args interface{}, reply interface{}) error {
+func (c *xClient) wrapCall(ctx context.Context, client RPCClient, servicePath, serviceMethod string, session protocol.ISession, args interface{}, reply interface{}) error {
 	if client == nil {
 		return ErrServerUnavailable
 	}
@@ -753,7 +753,7 @@ func (c *xClient) wrapCall(ctx context.Context, client RPCClient, servicePath,se
 // Broadcast sends requests to all servers and Success only when all servers return OK.
 // FailMode and SelectMode are meanless for this method.
 // Please set timeout to avoid hanging.
-func (c *xClient) Broadcast(ctx context.Context, servicePath,serviceMethod string, args interface{}, reply interface{}) error {
+func (c *xClient) Broadcast(ctx context.Context, servicePath, serviceMethod string, args interface{}, reply interface{}) error {
 	if c.isShutdown {
 		return ErrXClientShutdown
 	}
@@ -933,7 +933,7 @@ func (c *xClient) SendFile(ctx context.Context, fileName string, rateInBytesPerS
 	ctx = setServerTimeout(ctx)
 
 	reply := &share.FileTransferReply{}
-	err = c.Call(ctx, "kudos","TransferFile", dummySession, args, reply)
+	err = c.Call(ctx, "kudos", "TransferFile", dummySession, args, reply)
 	if err != nil {
 		return err
 	}
@@ -952,9 +952,9 @@ func (c *xClient) SendFile(ctx context.Context, fileName string, rateInBytesPerS
 
 	var tb *ratelimit.Bucket
 
-	if rateInBytesPerSecond > 0 {
-		tb = ratelimit.NewBucketWithRate(float64(rateInBytesPerSecond), rateInBytesPerSecond)
-	}
+	//if rateInBytesPerSecond > 0 {
+	//	tb = ratelimit.NewBucketWithRate(float64(rateInBytesPerSecond), rateInBytesPerSecond)
+	//}
 
 	sendBuffer := make([]byte, FileTransferBufferSize)
 loop:
@@ -999,7 +999,7 @@ func (c *xClient) DownloadFile(ctx context.Context, requestFileName string, save
 	}
 
 	reply := &share.FileTransferReply{}
-	err := c.Call(ctx, "kudos","DownloadFile", dummySession, args, reply)
+	err := c.Call(ctx, "kudos", "DownloadFile", dummySession, args, reply)
 	if err != nil {
 		return err
 	}
@@ -1082,7 +1082,7 @@ func (c *xClient) Stream(ctx context.Context, meta map[string]string) (net.Conn,
 	ctx = setServerTimeout(ctx)
 
 	reply := &share.StreamServiceReply{}
-	err := c.Call(ctx, "kudos","Stream", dummySession, args, reply)
+	err := c.Call(ctx, "kudos", "Stream", dummySession, args, reply)
 	if err != nil {
 		return nil, err
 	}

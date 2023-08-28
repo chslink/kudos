@@ -30,8 +30,8 @@ func newSelector(selectMode SelectMode, servers map[string]string) Selector {
 		return newRoundRobinSelector(servers)
 	case WeightedRoundRobin:
 		return newWeightedRoundRobinSelector(servers)
-	case WeightedICMP:
-		return newWeightedICMPSelector(servers)
+	//case WeightedICMP:
+	//	return newWeightedICMPSelector(servers)
 	case ConsistentHash:
 		return newConsistentHashSelector(servers)
 	case SelectByUser:

@@ -4,12 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"testing"
-
 	"time"
 
-	testutils "github.com/kudoochui/kudos/rpcx/_testutils"
-	"github.com/kudoochui/kudos/rpcx/protocol"
-	"github.com/kudoochui/kudos/rpcx/share"
+	testutils "github.com/chslink/kudos/rpcx/_testutils"
+	"github.com/chslink/kudos/rpcx/protocol"
+	"github.com/chslink/kudos/rpcx/share"
 )
 
 type Args struct {

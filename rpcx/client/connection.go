@@ -9,16 +9,16 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/kudoochui/kudos/rpcx/log"
-	"github.com/kudoochui/kudos/rpcx/share"
+	"github.com/chslink/kudos/rpcx/log"
+	"github.com/chslink/kudos/rpcx/share"
 )
 
 type ConnFactoryFn func(c *Client, network, address string) (net.Conn, error)
 
 var ConnFactories = map[string]ConnFactoryFn{
 	"http": newDirectHTTPConn,
-	"kcp":  newDirectKCPConn,
-	"quic": newDirectQuicConn,
+	//"kcp":  newDirectKCPConn,
+	//"quic": newDirectQuicConn,
 	"unix": newDirectConn,
 }
 
@@ -30,10 +30,10 @@ func (c *Client) Connect(network, address string) error {
 	switch network {
 	case "http":
 		conn, err = newDirectHTTPConn(c, network, address)
-	case "kcp":
-		conn, err = newDirectKCPConn(c, network, address)
-	case "quic":
-		conn, err = newDirectQuicConn(c, network, address)
+	//case "kcp":
+	//	conn, err = newDirectKCPConn(c, network, address)
+	//case "quic":
+	//	conn, err = newDirectQuicConn(c, network, address)
 	case "unix":
 		conn, err = newDirectConn(c, network, address)
 	default:

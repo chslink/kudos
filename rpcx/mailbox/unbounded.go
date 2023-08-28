@@ -1,8 +1,8 @@
 package mailbox
 
 import (
-	"github.com/kudoochui/kudos/rpcx/mailbox/queue/goring"
-	"github.com/kudoochui/kudos/rpcx/mailbox/queue/mpsc"
+	"github.com/chslink/kudos/rpcx/mailbox/queue/goring"
+	"github.com/chslink/kudos/rpcx/mailbox/queue/mpsc"
 )
 
 type unboundedMailboxQueue struct {

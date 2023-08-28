@@ -5,10 +5,6 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
-	"github.com/kudoochui/kudos/rpcx/log"
-	"github.com/kudoochui/kudos/rpcx/mailbox"
-	"github.com/kudoochui/kudos/rpcx/protocol"
-	"github.com/kudoochui/kudos/rpcx/share"
 	"io"
 	"net"
 	"runtime"
@@ -16,41 +12,46 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
+
+	"github.com/chslink/kudos/rpcx/log"
+	"github.com/chslink/kudos/rpcx/mailbox"
+	"github.com/chslink/kudos/rpcx/protocol"
+	"github.com/chslink/kudos/rpcx/share"
 )
 
 type userDataCache struct {
-	userDataMap 		sync.Map
+	userDataMap sync.Map
 }
 
 var globalUserDataCache = &userDataCache{}
 
 type ConnAgent struct {
-	server  *Server
-	conn 	net.Conn
+	server     *Server
+	conn       net.Conn
 	sessionMap sync.Map
 
-	userDataMap	map[int64]interface{}				//data attachment: uid <=> playerData
-	dataMutex sync.RWMutex
+	userDataMap map[int64]interface{} //data attachment: uid <=> playerData
+	dataMutex   sync.RWMutex
 }
 
 type TimeTickCallback func(*ServerSession)
 
 func newAgent(s *Server, conn net.Conn) *ConnAgent {
 	return &ConnAgent{
-		server: s,
-		conn: conn,
+		server:      s,
+		conn:        conn,
 		userDataMap: make(map[int64]interface{}),
 	}
 }
 
 func (a *ConnAgent) OnClose() {
 	// save user data to global
-	for uid,c := range a.userDataMap {
+	for uid, c := range a.userDataMap {
 		globalUserDataCache.userDataMap.Store(uid, c)
 	}
 }
 
-func (a *ConnAgent)serveConn() {
+func (a *ConnAgent) serveConn() {
 	s := a.server
 	conn := a.conn
 
@@ -323,7 +324,7 @@ func (a *ConnAgent) GetData(userId int64) interface{} {
 	return nil
 }
 
-func (a *ConnAgent) SetData(userId int64, data interface{})  {
+func (a *ConnAgent) SetData(userId int64, data interface{}) {
 	a.dataMutex.Lock()
 	defer a.dataMutex.Unlock()
 

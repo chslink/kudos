@@ -10,11 +10,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/chslink/kudos/rpcx/log"
+	"github.com/chslink/kudos/rpcx/protocol"
+	"github.com/chslink/kudos/rpcx/share"
 	"github.com/julienschmidt/httprouter"
 	"github.com/rs/cors"
-	"github.com/kudoochui/kudos/rpcx/log"
-	"github.com/kudoochui/kudos/rpcx/protocol"
-	"github.com/kudoochui/kudos/rpcx/share"
 	"github.com/soheilhy/cmux"
 )
 

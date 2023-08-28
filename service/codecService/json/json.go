@@ -1,11 +1,10 @@
 package json
 
 import (
-	"github.com/json-iterator/go"
+	"encoding/json"
 )
 
 type JsonCodec struct {
-
 }
 
 func NewCodec() *JsonCodec {
@@ -15,7 +14,6 @@ func NewCodec() *JsonCodec {
 
 // goroutine safe
 func (p *JsonCodec) Unmarshal(obj interface{}, data []byte) error {
-	var json = jsoniter.ConfigCompatibleWithStandardLibrary
 	err := json.Unmarshal(data, obj)
 	if err != nil {
 		return err
@@ -26,7 +24,6 @@ func (p *JsonCodec) Unmarshal(obj interface{}, data []byte) error {
 
 // goroutine safe
 func (p *JsonCodec) Marshal(msg interface{}) ([]byte, error) {
-	var json = jsoniter.ConfigCompatibleWithStandardLibrary
 	data, err := json.Marshal(msg)
 	return data, err
 }

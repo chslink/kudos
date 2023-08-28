@@ -3,15 +3,16 @@ package network
 import (
 	"encoding/binary"
 	"errors"
-	"github.com/kudoochui/kudos/protocol/protobuf/pkg"
 	"io"
+
+	"github.com/chslink/kudos/protocol/protobuf/pkg"
 )
 
 // --------------
 // | len | data |
 // --------------
 type MsgParser struct {
-	lenMsgLen	 uint32
+	lenMsgLen    uint32
 	minMsgLen    uint32
 	maxMsgLen    uint32
 	littleEndian bool

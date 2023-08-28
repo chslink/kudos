@@ -1,9 +1,10 @@
 package timer
 
 import (
-	"github.com/kudoochui/kudos/log"
 	"runtime"
 	"time"
+
+	"github.com/chslink/kudos/log"
 )
 
 // one dispatcher per goroutine (goroutine not safe)

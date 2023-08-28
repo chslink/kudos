@@ -1,8 +1,9 @@
 package idService
 
 import (
-	"github.com/kudoochui/kudos/config"
 	"sync"
+
+	"github.com/chslink/kudos/config"
 )
 
 var node *Node

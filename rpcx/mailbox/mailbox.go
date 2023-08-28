@@ -1,11 +1,12 @@
 package mailbox
 
 import (
-	"github.com/kudoochui/kudos/rpcx/log"
-	"github.com/kudoochui/kudos/rpcx/mailbox/queue/mpsc"
 	"runtime"
 	"sync/atomic"
 	"time"
+
+	"github.com/chslink/kudos/rpcx/log"
+	"github.com/chslink/kudos/rpcx/mailbox/queue/mpsc"
 )
 
 // MessageInvoker is the interface used by a mailbox to forward messages for processing
@@ -31,7 +32,7 @@ const (
 type defaultMailbox struct {
 	userMailbox     queue
 	systemMailbox   *mpsc.Queue
-	timeMailbox 	interface{}				//only one message
+	timeMailbox     interface{} //only one message
 	schedulerStatus int32
 	userMessages    int32
 	sysMessages     int32

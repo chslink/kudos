@@ -2,20 +2,21 @@ package network
 
 import (
 	"net"
-	"github.com/kudoochui/kudos/log"
 	"sync"
 	"time"
+
+	"github.com/chslink/kudos/log"
 )
 
 type TCPServer struct {
-	Addr            string
-	MaxConnNum      int
-	NewAgent        func(*TCPConn) Agent
-	ln              net.Listener
-	conns           ConnSet
-	mutexConns      sync.Mutex
-	wgLn            sync.WaitGroup
-	wgConns         sync.WaitGroup
+	Addr       string
+	MaxConnNum int
+	NewAgent   func(*TCPConn) Agent
+	ln         net.Listener
+	conns      ConnSet
+	mutexConns sync.Mutex
+	wgLn       sync.WaitGroup
+	wgConns    sync.WaitGroup
 
 	// msg parser
 	//LenMsgLen    int

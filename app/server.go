@@ -1,9 +1,10 @@
 package app
 
 import (
-	"github.com/kudoochui/kudos/log"
 	"runtime"
 	"sync"
+
+	"github.com/chslink/kudos/log"
 )
 
 type Server interface {
@@ -12,9 +13,8 @@ type Server interface {
 	OnStop()
 }
 
-
 type server struct {
-	s       Server
+	s        Server
 	closeSig chan bool
 	wg       sync.WaitGroup
 }

@@ -1,8 +1,9 @@
 package connector
 
 import (
-	"github.com/kudoochui/kudos/rpc"
 	"net"
+
+	"github.com/chslink/kudos/rpc"
 )
 
 type Agent interface {

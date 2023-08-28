@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/kudoochui/kudos/rpcx/tool/xgen/parser"
+	"github.com/chslink/kudos/rpcx/tool/xgen/parser"
 )
 
 var (

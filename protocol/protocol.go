@@ -2,13 +2,14 @@ package protocol
 
 import (
 	"bytes"
-	"github.com/kudoochui/kudos/rpcx/util"
 	"sync"
+
+	"github.com/chslink/kudos/rpcx/util"
 )
 
 var (
 	bufferPool = util.NewLimitedPool(512, 4096)
-	sPool = &sync.Pool{
+	sPool      = &sync.Pool{
 		New: func() interface{} {
 			return &bytes.Buffer{}
 		},
@@ -19,7 +20,7 @@ func GetPoolMsg() *bytes.Buffer {
 	return sPool.Get().(*bytes.Buffer)
 }
 
-func FreePoolMsg(buf *bytes.Buffer)  {
+func FreePoolMsg(buf *bytes.Buffer) {
 	sPool.Put(buf)
 }
 
@@ -27,7 +28,7 @@ func GetPoolBuffer(size int) *[]byte {
 	return bufferPool.Get(size)
 }
 
-func FreePoolBuffer(buf *[]byte)  {
+func FreePoolBuffer(buf *[]byte) {
 	bufferPool.Put(buf)
 }
 
@@ -42,6 +43,6 @@ func GetUint32PoolData() *[]byte {
 	return poolUint32Data.Get().(*[]byte)
 }
 
-func PutUint32PoolData(buffer *[]byte)  {
+func PutUint32PoolData(buffer *[]byte) {
 	poolUint32Data.Put(buffer)
 }

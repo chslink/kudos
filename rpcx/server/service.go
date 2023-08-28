@@ -11,8 +11,8 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	rerrors "github.com/kudoochui/kudos/rpcx/errors"
-	"github.com/kudoochui/kudos/rpcx/log"
+	rerrors "github.com/chslink/kudos/rpcx/errors"
+	"github.com/chslink/kudos/rpcx/log"
 )
 
 // Precompute the reflect type for error. Can't use error directly
@@ -61,10 +61,11 @@ func isExportedOrBuiltinType(t reflect.Type) bool {
 
 // Register publishes in the server the set of methods of the
 // receiver value that satisfy the following conditions:
-//	- exported method of exported type
-//	- three arguments, the first is of context.Context, both of exported type for three arguments
-//	- the third argument is a pointer
-//	- one return value, of type error
+//   - exported method of exported type
+//   - three arguments, the first is of context.Context, both of exported type for three arguments
+//   - the third argument is a pointer
+//   - one return value, of type error
+//
 // It returns an error if the receiver is not an exported type or has
 // no suitable methods. It also logs the error.
 // The client accesses each method using a string of the form "Type.Method",
@@ -91,9 +92,10 @@ func (s *Server) RegisterName(name string, rcvr interface{}, metadata string) er
 }
 
 // RegisterFunction publishes a function that satisfy the following conditions:
-//	- three arguments, the first is of context.Context, both of exported type for three arguments
-//	- the third argument is a pointer
-//	- one return value, of type error
+//   - three arguments, the first is of context.Context, both of exported type for three arguments
+//   - the third argument is a pointer
+//   - one return value, of type error
+//
 // The client accesses function using a string of the form "servicePath.Method".
 func (s *Server) RegisterFunction(servicePath string, fn interface{}, metadata string) error {
 	fname, err := s.registerFunction(servicePath, fn, "", false)

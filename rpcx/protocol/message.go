@@ -5,8 +5,9 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"github.com/kudoochui/kudos/rpcx/util"
 	"io"
+
+	"github.com/chslink/kudos/rpcx/util"
 )
 
 var (
@@ -99,9 +100,9 @@ type Message struct {
 	*Header
 
 	//----session info
-	NodeId		string
-	SessionId	int64
-	UserId 		int64
+	NodeId    string
+	SessionId int64
+	UserId    int64
 	//Settings	map[string]string
 	//----------------
 
@@ -124,7 +125,6 @@ func NewMessage() *Message {
 
 // Header is the first part of Message and has fixed size.
 // Format:
-//
 type Header [12]byte
 
 // CheckMagicNumber checks whether header starts rpcx magic number.
@@ -513,11 +513,11 @@ func (m *Message) Decode(r io.Reader) error {
 	n = nEnd
 
 	nEnd = n + 8
-	m.SessionId = int64(binary.BigEndian.Uint64(data[n : nEnd]))
+	m.SessionId = int64(binary.BigEndian.Uint64(data[n:nEnd]))
 	n = nEnd
 
 	nEnd = n + 8
-	m.UserId = int64(binary.BigEndian.Uint64(data[n : nEnd]))
+	m.UserId = int64(binary.BigEndian.Uint64(data[n:nEnd]))
 	n = nEnd
 
 	// parse payload

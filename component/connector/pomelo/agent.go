@@ -1,35 +1,36 @@
 package pomelo
 
 import (
-	"github.com/kudoochui/kudos/log"
-	"github.com/kudoochui/kudos/network"
-	"github.com/kudoochui/kudos/protocol"
-	"github.com/kudoochui/kudos/protocol/pomelo/message"
-	"github.com/kudoochui/kudos/protocol/pomelo/pkg"
-	"github.com/kudoochui/kudos/rpc"
-	"github.com/kudoochui/kudos/service/codecService"
-	"github.com/kudoochui/kudos/rpcx/client"
 	"net"
 	"reflect"
+
+	"github.com/chslink/kudos/log"
+	"github.com/chslink/kudos/network"
+	"github.com/chslink/kudos/protocol"
+	"github.com/chslink/kudos/protocol/pomelo/message"
+	"github.com/chslink/kudos/protocol/pomelo/pkg"
+	"github.com/chslink/kudos/rpc"
+	"github.com/chslink/kudos/rpcx/client"
+	"github.com/chslink/kudos/service/codecService"
 )
 
 type agent struct {
-	conn      network.Conn
-	connector *Connector
-	session   *rpc.Session
-	userData  interface{}
-	agentHandler	*agentHandler
-	chanRet		chan *client.Call
-	writeChan 	chan *[]byte
+	conn         network.Conn
+	connector    *Connector
+	session      *rpc.Session
+	userData     interface{}
+	agentHandler *agentHandler
+	chanRet      chan *client.Call
+	writeChan    chan *[]byte
 }
 
-func NewAgent(conn network.Conn, connector *Connector) *agent{
+func NewAgent(conn network.Conn, connector *Connector) *agent {
 	a := &agent{
 		conn:      conn,
 		connector: connector,
 		session:   rpc.NewSession(connector.nodeId),
 		userData:  nil,
-		chanRet: make(chan *client.Call, 100),
+		chanRet:   make(chan *client.Call, 100),
 		writeChan: make(chan *[]byte, 100),
 	}
 	a.agentHandler = NewAgentHandler(a)
@@ -47,7 +48,7 @@ func (a *agent) Run() {
 				} else {
 					args := ri.Args.(*rpc.Args)
 					if a.connector.handlerFilter != nil {
-						a.connector.handlerFilter.After(ri.ServicePath + "." + ri.ServiceMethod, ri)
+						a.connector.handlerFilter.After(ri.ServicePath+"."+ri.ServiceMethod, ri)
 					}
 
 					a.WriteResponse(args.MsgId, ri.Reply)
@@ -146,6 +147,6 @@ func (a *agent) KickMessage(reason string) {
 	ret := map[string]string{
 		"reason": reason,
 	}
-	buffer,_ := codecService.GetCodecService().Marshal(ret)
+	buffer, _ := codecService.GetCodecService().Marshal(ret)
 	a.Write(pkg.Encode(pkg.TYPE_KICK, buffer))
 }

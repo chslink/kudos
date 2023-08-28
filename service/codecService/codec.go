@@ -1,13 +1,13 @@
 package codecService
 
 import (
-	"github.com/kudoochui/kudos/service/codecService/json"
-	"github.com/kudoochui/kudos/service/codecService/protobuf"
 	"sync"
+
+	"github.com/chslink/kudos/service/codecService/json"
 )
 
 const (
-	TYPE_CODEC_JSON = "json"
+	TYPE_CODEC_JSON     = "json"
 	TYPE_CODEC_PROTOBUF = "protobuf"
 )
 
@@ -36,8 +36,8 @@ func GetCodecService() Codec {
 		switch codecType {
 		case TYPE_CODEC_JSON:
 			codec = json.NewCodec()
-		case TYPE_CODEC_PROTOBUF:
-			codec = protobuf.NewCodec()
+			//case TYPE_CODEC_PROTOBUF:
+			//	codec = protobuf.NewCodec()
 		}
 	})
 	return codec

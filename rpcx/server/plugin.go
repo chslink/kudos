@@ -4,12 +4,12 @@ import (
 	"context"
 	"net"
 
-	"github.com/kudoochui/kudos/rpcx/errors"
-	"github.com/kudoochui/kudos/rpcx/protocol"
+	"github.com/chslink/kudos/rpcx/errors"
+	"github.com/chslink/kudos/rpcx/protocol"
 )
 
-//PluginContainer represents a plugin container that defines all methods to manage plugins.
-//And it also defines all extension points.
+// PluginContainer represents a plugin container that defines all methods to manage plugins.
+// And it also defines all extension points.
 type PluginContainer interface {
 	Add(plugin Plugin)
 	Remove(plugin Plugin)
@@ -39,7 +39,7 @@ type PluginContainer interface {
 }
 
 // Plugin is the server plugin interface.
-type Plugin interface {}
+type Plugin interface{}
 
 type (
 	// RegisterPlugin is .
@@ -198,7 +198,7 @@ func (p *pluginContainer) DoUnregister(name string) error {
 	return nil
 }
 
-//DoPostConnAccept handles accepted conn
+// DoPostConnAccept handles accepted conn
 func (p *pluginContainer) DoPostConnAccept(conn net.Conn) (net.Conn, bool) {
 	var flag bool
 	for i := range p.plugins {
@@ -213,7 +213,7 @@ func (p *pluginContainer) DoPostConnAccept(conn net.Conn) (net.Conn, bool) {
 	return conn, true
 }
 
-//DoPostConnClose handles closed conn
+// DoPostConnClose handles closed conn
 func (p *pluginContainer) DoPostConnClose(conn net.Conn) bool {
 	var flag bool
 	for i := range p.plugins {

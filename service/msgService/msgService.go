@@ -1,11 +1,11 @@
 package msgService
 
 import (
-	"github.com/kudoochui/kudos/log"
 	"reflect"
 	"sync"
-)
 
+	"github.com/chslink/kudos/log"
+)
 
 var msgMgrSingleton *msgMgr
 var once sync.Once
@@ -29,9 +29,9 @@ type msgMgr struct {
 }
 
 type MsgInfo struct {
-	Route 		string
-	RespId 		uint32
-	MsgReqType 	reflect.Type
+	Route       string
+	RespId      uint32
+	MsgReqType  reflect.Type
 	MsgRespType reflect.Type
 }
 

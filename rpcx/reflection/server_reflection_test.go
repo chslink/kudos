@@ -6,7 +6,7 @@ import (
 
 	"github.com/kr/pretty"
 
-	testutils "github.com/kudoochui/kudos/rpcx/_testutils"
+	testutils "github.com/chslink/kudos/rpcx/_testutils"
 )
 
 type PBArith int

@@ -2,18 +2,19 @@ package remote
 
 import (
 	"context"
-	"github.com/kudoochui/kudos/component"
-	"github.com/kudoochui/kudos/log"
-	"github.com/kudoochui/kudos/rpcx/server"
-	"github.com/kudoochui/kudos/rpcx/serverplugin"
-	metrics "github.com/rcrowley/go-metrics"
 	"time"
+
+	"github.com/chslink/kudos/component"
+	"github.com/chslink/kudos/log"
+	"github.com/chslink/kudos/rpcx/server"
+	"github.com/chslink/kudos/rpcx/serverplugin"
+	"github.com/rcrowley/go-metrics"
 )
 
 type Remote struct {
-	opts    		*Options
+	opts *Options
 
-	server			*server.Server
+	server *server.Server
 }
 
 type RegisterPlugin interface {
@@ -34,7 +35,7 @@ func (r *Remote) OnInit(s component.ServerImpl) {
 }
 
 func (r *Remote) OnDestroy() {
-	ctx, cancel := context.WithTimeout(context.Background(), 5 * time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	r.server.Shutdown(ctx)
 }

@@ -2,16 +2,17 @@ package connector
 
 import (
 	"context"
-	"github.com/kudoochui/kudos/rpc"
-	msgService "github.com/kudoochui/kudos/service/msgService"
+
+	"github.com/chslink/kudos/rpc"
+	"github.com/chslink/kudos/service/msgService"
 )
 
 type ChannelRemote struct {
-	connector	Connector
+	connector Connector
 }
 
 func NewChannelRemote(conn Connector) *ChannelRemote {
-	return &ChannelRemote{connector:conn}
+	return &ChannelRemote{connector: conn}
 }
 
 // Push message to client by uids.

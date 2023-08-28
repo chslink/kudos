@@ -13,11 +13,11 @@ import (
 	"sync"
 	"time"
 
-	opentracing "github.com/opentracing/opentracing-go"
+	"github.com/chslink/kudos/rpcx/log"
+	"github.com/chslink/kudos/rpcx/protocol"
+	"github.com/chslink/kudos/rpcx/share"
+	"github.com/opentracing/opentracing-go"
 	circuit "github.com/rubyist/circuitbreaker"
-	"github.com/kudoochui/kudos/rpcx/log"
-	"github.com/kudoochui/kudos/rpcx/protocol"
-	"github.com/kudoochui/kudos/rpcx/share"
 	"go.opencensus.io/trace"
 )
 
@@ -174,7 +174,7 @@ type Call struct {
 	ServiceMethod string            // The name of the service and method to call.
 	Metadata      map[string]string // metadata
 	ResMetadata   map[string]string
-	session 	  protocol.ISession
+	session       protocol.ISession
 	Args          interface{} // The argument to the function (*struct).
 	Reply         interface{} // The reply from the function (*struct).
 	Error         error       // After completion, the error status.

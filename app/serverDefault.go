@@ -1,6 +1,6 @@
 package app
 
-import "github.com/kudoochui/kudos/component"
+import "github.com/chslink/kudos/component"
 
 type ServerDefault struct {
 	ServerId string
@@ -25,21 +25,21 @@ func (s *ServerDefault) GetComponent(name string) component.Component {
 
 // Initialize components
 func (s *ServerDefault) OnInit() {
-	for _,com := range s.Components {
+	for _, com := range s.Components {
 		com.OnInit(s)
 	}
 }
 
 // Destroy components
 func (s *ServerDefault) OnDestroy() {
-	for _,com := range s.Components {
+	for _, com := range s.Components {
 		com.OnDestroy()
 	}
 }
 
 // Run components
 func (s *ServerDefault) OnRun(closeSig chan bool) {
-	for _,com := range s.Components {
+	for _, com := range s.Components {
 		com.OnRun(closeSig)
 	}
 }

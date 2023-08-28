@@ -2,21 +2,22 @@ package message
 
 import (
 	"fmt"
-	"github.com/kudoochui/kudos/protocol"
-	"github.com/kudoochui/kudos/protocol/pomelo/pkg"
+
+	"github.com/chslink/kudos/protocol"
+	"github.com/chslink/kudos/protocol/pomelo/pkg"
 )
 
 const (
-	TYPE_REQUEST = iota
-	TYPE_NOTIFY			//1
-	TYPE_RESPONSE		//2
-	TYPE_PUSH			//3
+	TYPE_REQUEST  = iota
+	TYPE_NOTIFY   //1
+	TYPE_RESPONSE //2
+	TYPE_PUSH     //3
 
-	MSG_FLAG_BYTES = 1
-	MSG_ROUTE_CODE_BYTES = 2
-	MSG_ROUTE_CODE_MAX = 0xffff
+	MSG_FLAG_BYTES          = 1
+	MSG_ROUTE_CODE_BYTES    = 2
+	MSG_ROUTE_CODE_MAX      = 0xffff
 	MSG_COMPRESS_ROUTE_MASK = 0x1
-	MSG_TYPE_MASK = 0x7
+	MSG_TYPE_MASK           = 0x7
 )
 
 // Message protocol encode.
@@ -25,7 +26,7 @@ func Encode(id int, msgType int, route uint16, msg []byte) []byte {
 	if msgHasId(msgType) {
 		idBytes = caculateMsgIdBytes(id)
 	}
-	msgLen := MSG_FLAG_BYTES + idBytes;
+	msgLen := MSG_FLAG_BYTES + idBytes
 
 	if msgHasRoute(msgType) {
 		msgLen += MSG_ROUTE_CODE_BYTES
@@ -52,7 +53,7 @@ func Encode(id int, msgType int, route uint16, msg []byte) []byte {
 }
 
 // Message protocol decode.
-func Decode(buffer []byte) (id int, msgType int, route uint16, body []byte){
+func Decode(buffer []byte) (id int, msgType int, route uint16, body []byte) {
 	offset := 0
 
 	flag := buffer[offset]
@@ -63,19 +64,19 @@ func Decode(buffer []byte) (id int, msgType int, route uint16, body []byte){
 	if msgHasId(msgType) {
 		var i uint32 = 0
 		m := int(buffer[offset])
-		id += (m & 0x7f) << (7*i)
+		id += (m & 0x7f) << (7 * i)
 		offset++
 		i++
-		for ;m >= 128; {
+		for m >= 128 {
 			m = int(buffer[offset])
-			id += (m & 0x7f) << (7*i)
+			id += (m & 0x7f) << (7 * i)
 			offset++
 			i++
 		}
 	}
 
 	if msgHasRoute(msgType) {
-		route = uint16(buffer[offset] << 8 | buffer[offset+1])
+		route = uint16(buffer[offset]<<8 | buffer[offset+1])
 		offset += 2
 	}
 
@@ -93,7 +94,7 @@ func msgHasRoute(msgType int) bool {
 
 func caculateMsgIdBytes(id int) int {
 	l := 0
-	for ;id>0; {
+	for id > 0 {
 		l += 1
 		id >>= 7
 	}
@@ -101,7 +102,7 @@ func caculateMsgIdBytes(id int) int {
 }
 
 func encodeMsgFlag(msgType int, buffer []byte, offset int) int {
-	if msgType != TYPE_REQUEST && msgType != TYPE_NOTIFY && msgType != TYPE_RESPONSE && msgType !=  TYPE_PUSH {
+	if msgType != TYPE_REQUEST && msgType != TYPE_NOTIFY && msgType != TYPE_RESPONSE && msgType != TYPE_PUSH {
 		fmt.Printf("unkonw message type: %d", msgType)
 		return offset
 	}
@@ -117,16 +118,16 @@ func encodeMsgFlag(msgType int, buffer []byte, offset int) int {
 
 func encodeMsgId(id int, idBytes int, buffer []byte, offset int) int {
 	tmp := id % 128
-	next := int(id/128)
+	next := int(id / 128)
 	if next != 0 {
 		tmp += 128
 	}
 	buffer[offset] = byte(tmp)
 	offset++
 	id = next
-	for ;id != 0; {
+	for id != 0 {
 		tmp = id % 128
-		next = int(id/128)
+		next = int(id / 128)
 		if next != 0 {
 			tmp += 128
 		}
@@ -144,8 +145,8 @@ func encodeMsgRoute(route uint16, buffer []byte, offset int) int {
 	}
 	buffer[offset] = byte((route >> 8) & 0xff)
 	offset++
-	buffer[offset] = byte(route & 0xff);
+	buffer[offset] = byte(route & 0xff)
 	offset++
 
-	return offset;
+	return offset
 }

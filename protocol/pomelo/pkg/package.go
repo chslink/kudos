@@ -1,14 +1,14 @@
 package pkg
 
-import "github.com/kudoochui/kudos/protocol"
+import "github.com/chslink/kudos/protocol"
 
 const (
-	TYPE_NULL = iota
-	TYPE_HANDSHAKE			//1
-	TYPE_HANDSHAKE_ACK		//2
-	TYPE_HEARTBEAT			//3
-	TYPE_DATA				//4
-	TYPE_KICK				//5
+	TYPE_NULL          = iota
+	TYPE_HANDSHAKE     //1
+	TYPE_HANDSHAKE_ACK //2
+	TYPE_HEARTBEAT     //3
+	TYPE_DATA          //4
+	TYPE_KICK          //5
 
 	PKG_HEAD_BYTES = 4
 )

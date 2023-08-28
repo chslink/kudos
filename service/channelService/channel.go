@@ -2,17 +2,18 @@ package channelService
 
 import (
 	"errors"
-	"github.com/kudoochui/kudos/log"
-	"github.com/kudoochui/kudos/rpc"
-	"github.com/kudoochui/kudos/rpcx/server"
-	"github.com/kudoochui/kudos/service/codecService"
 	"sync"
+
+	"github.com/chslink/kudos/log"
+	"github.com/chslink/kudos/rpc"
+	"github.com/chslink/kudos/rpcx/server"
+	"github.com/chslink/kudos/service/codecService"
 )
 
 type Channel struct {
-	name 		string
-	group 		map[int64]*server.ServerSession			//uid => session
-	lock 		sync.RWMutex
+	name  string
+	group map[int64]*server.ServerSession //uid => session
+	lock  sync.RWMutex
 }
 
 func NewChannel(name string) *Channel {
@@ -27,7 +28,7 @@ func (c *Channel) Add(s *server.ServerSession) error {
 	c.lock.Lock()
 	defer c.lock.Unlock()
 
-	if _,ok := c.group[s.GetUserId()]; ok {
+	if _, ok := c.group[s.GetUserId()]; ok {
 		return errors.New("already in channel")
 	}
 	c.group[s.GetUserId()] = s
@@ -35,7 +36,7 @@ func (c *Channel) Add(s *server.ServerSession) error {
 }
 
 // Remove user from channel.
-func (c *Channel) Leave(uid int64)  {
+func (c *Channel) Leave(uid int64) {
 	c.lock.Lock()
 	defer c.lock.Unlock()
 
@@ -48,12 +49,12 @@ func (c *Channel) Leave(uid int64)  {
 }
 
 // Get userId array
-func (c *Channel) GetMembers() []int64  {
+func (c *Channel) GetMembers() []int64 {
 	c.lock.RLock()
 	defer c.lock.RUnlock()
 
 	array := make([]int64, 0)
-	for k,_ := range c.group {
+	for k, _ := range c.group {
 		array = append(array, k)
 	}
 	return array
@@ -64,7 +65,7 @@ func (c *Channel) GetSessions() map[int64]*server.ServerSession {
 	defer c.lock.RUnlock()
 
 	m := make(map[int64]*server.ServerSession, 0)
-	for k,v := range c.group {
+	for k, v := range c.group {
 		m[k] = v
 	}
 	return m
@@ -82,8 +83,8 @@ func (c *Channel) PushMessage(route string, msg interface{}, excludeUid []int64)
 		excludeMap[uid] = true
 	}
 	args := &rpc.ArgsGroup{
-		Route: 	 route,
-		Payload:  data,
+		Route:   route,
+		Payload: data,
 	}
 
 	c.lock.RLock()

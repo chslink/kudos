@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"io/ioutil"
 
+	"github.com/chslink/kudos/rpcx/util"
 	"github.com/golang/snappy"
-	"github.com/kudoochui/kudos/rpcx/util"
 )
 
 // Compressor defines a common compression interface.

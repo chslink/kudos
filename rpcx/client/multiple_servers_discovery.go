@@ -4,7 +4,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/kudoochui/kudos/rpcx/log"
+	"github.com/chslink/kudos/rpcx/log"
 )
 
 // MultipleServersDiscovery is a multiple servers service discovery.

@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
+	logs "github.com/chslink/kudos/log/beego"
 	"github.com/gogo/protobuf/proto"
-	logs "github.com/kudoochui/kudos/log/beego"
 )
 
 const (

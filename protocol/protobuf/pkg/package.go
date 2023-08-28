@@ -2,7 +2,8 @@ package pkg
 
 import (
 	"encoding/binary"
-	"github.com/kudoochui/kudos/protocol"
+
+	"github.com/chslink/kudos/protocol"
 )
 
 const (
@@ -19,6 +20,7 @@ func SetByteOrder(littleEndian bool) {
 func GetByteOrder() bool {
 	return gLittleEndian
 }
+
 /**
  * Package protocol encode.
  *
@@ -38,7 +40,7 @@ func Encode(pkgType uint32, body []byte) *[]byte {
 		binary.BigEndian.PutUint32(*buffer, uint32(length))
 		binary.BigEndian.PutUint32((*buffer)[PKG_SIZE_BYTES:], pkgType)
 	}
-	copy((*buffer)[PKG_SIZE_BYTES + PKG_TYPE_BYTES:], body)
+	copy((*buffer)[PKG_SIZE_BYTES+PKG_TYPE_BYTES:], body)
 	return buffer
 }
 

@@ -3,9 +3,10 @@ package web
 import (
 	"context"
 	"fmt"
-	"github.com/gorilla/mux"
-	"github.com/kudoochui/kudos/log"
 	"net/http"
+
+	"github.com/chslink/kudos/log"
+	"github.com/gorilla/mux"
 )
 
 type Handler func(http.ResponseWriter, *http.Request)
@@ -16,10 +17,10 @@ func (f Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 type WebServer struct {
-	opts		*Options
-	server 		*http.Server
-	router 		*mux.Router
-	routeMap 	map[string]Handler
+	opts           *Options
+	server         *http.Server
+	router         *mux.Router
+	routeMap       map[string]Handler
 	prefixRouteMap map[string]http.Handler
 }
 
@@ -27,8 +28,8 @@ func NewWebServer(opts ...Option) *WebServer {
 	options := newOptions(opts...)
 
 	web := &WebServer{
-		opts: options,
-		routeMap: map[string]Handler{},
+		opts:           options,
+		routeMap:       map[string]Handler{},
 		prefixRouteMap: map[string]http.Handler{},
 	}
 
@@ -57,11 +58,11 @@ func (w *WebServer) OnDestroy() {
 
 func (w *WebServer) OnRun(closeSig chan bool) {
 	w.router = mux.NewRouter()
-	for p,f := range w.routeMap {
+	for p, f := range w.routeMap {
 		w.router.HandleFunc(p, f)
 	}
 
-	for p,f := range w.prefixRouteMap {
+	for p, f := range w.prefixRouteMap {
 		w.router.PathPrefix(p).Handler(f)
 	}
 
@@ -70,7 +71,7 @@ func (w *WebServer) OnRun(closeSig chan bool) {
 		WriteTimeout: w.opts.WriteTimeout,
 		ReadTimeout:  w.opts.ReadTimeout,
 		IdleTimeout:  w.opts.IdleTimeout,
-		Handler: w.router,
+		Handler:      w.router,
 	}
 
 	log.Info("web server listen at: %s:%d", w.opts.ListenIp, w.opts.ListenPort)

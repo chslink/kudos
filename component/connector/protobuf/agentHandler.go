@@ -1,22 +1,23 @@
 package protobuf
 
 import (
-	"github.com/kudoochui/kudos/log"
-	"github.com/kudoochui/kudos/protocol/protobuf/pkg"
-	"github.com/kudoochui/kudos/rpc"
-	"github.com/kudoochui/kudos/service/msgService"
-	"github.com/kudoochui/kudos/utils/timer"
 	"reflect"
 	"strings"
+
+	"github.com/chslink/kudos/log"
+	"github.com/chslink/kudos/protocol/protobuf/pkg"
+	"github.com/chslink/kudos/rpc"
+	"github.com/chslink/kudos/service/msgService"
+	"github.com/chslink/kudos/utils/timer"
 )
 
 type agentHandler struct {
-	agent 	*agent
+	agent        *agent
 	timerHandler *timer.Timer
 }
 
 func NewAgentHandler(a *agent) *agentHandler {
-	return &agentHandler{agent:a}
+	return &agentHandler{agent: a}
 }
 
 func (h *agentHandler) Handle(pkgType uint32, body []byte) {
@@ -53,8 +54,8 @@ func (h *agentHandler) handleData(pkgType uint32, body []byte) {
 	}
 
 	args := &rpc.Args{
-		MsgId: int(msgInfo.RespId),
-		MsgReq:  data,
+		MsgId:  int(msgInfo.RespId),
+		MsgReq: data,
 	}
 
 	msgResp := reflect.New(msgInfo.MsgRespType.Elem()).Interface()
@@ -73,7 +74,7 @@ func (h *agentHandler) handleData(pkgType uint32, body []byte) {
 		if err != nil {
 			log.Error("customer route error: %v", err)
 			reply := &pkg.RespResult{
-				Code:    int32(pkg.EErrorCode_ERROR_ROUTE_ID),
+				Code: int32(pkg.EErrorCode_ERROR_ROUTE_ID),
 				Msg:  err.Error(),
 			}
 			h.agent.WriteResponse(int(pkg.EMsgType_TYPE_COMMON_RESULT), reply)

@@ -4,36 +4,37 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/kudoochui/kudos/component"
-	"github.com/kudoochui/kudos/filter"
-	"github.com/kudoochui/kudos/log"
-	"github.com/kudoochui/kudos/rpc"
-	"github.com/kudoochui/kudos/rpcx/client"
-	"github.com/kudoochui/kudos/rpcx/protocol"
-	"github.com/kudoochui/kudos/rpcx/server"
-	"github.com/kudoochui/kudos/rpcx/share"
 	"reflect"
 	"sync"
+
+	"github.com/chslink/kudos/component"
+	"github.com/chslink/kudos/filter"
+	"github.com/chslink/kudos/log"
+	"github.com/chslink/kudos/rpc"
+	"github.com/chslink/kudos/rpcx/client"
+	"github.com/chslink/kudos/rpcx/protocol"
+	"github.com/chslink/kudos/rpcx/server"
+	"github.com/chslink/kudos/rpcx/share"
 )
 
 // It is deprecated. Use RpcClientService instead
 type Proxy struct {
-	opts 			*Options
+	opts *Options
 
-	rpcClient 		*client.OneClient
-	lock 			sync.RWMutex
-	rpcFilter     	filter.Filter
+	rpcClient *client.OneClient
+	lock      sync.RWMutex
+	rpcFilter filter.Filter
 
-	ch				chan *protocol.Message
-	serviceMap   	map[string]*server.Service
+	ch         chan *protocol.Message
+	serviceMap map[string]*server.Service
 }
 
 func NewProxy(opts ...Option) *Proxy {
 	options := newOptions(opts...)
 
 	return &Proxy{
-		opts:      options,
-		ch: make(chan *protocol.Message, 100),
+		opts:       options,
+		ch:         make(chan *protocol.Message, 100),
 		serviceMap: make(map[string]*server.Service),
 	}
 }
@@ -42,13 +43,13 @@ func (r *Proxy) OnInit(s component.ServerImpl) {
 	var d client.ServiceDiscovery
 	switch r.opts.RegistryType {
 	case "consul":
-		d,_ = client.NewConsulDiscovery(r.opts.BasePath, "", []string{r.opts.RegistryAddr}, nil)
+		d, _ = client.NewConsulDiscovery(r.opts.BasePath, "", []string{r.opts.RegistryAddr}, nil)
 	case "etcd":
-		d,_ = client.NewEtcdDiscovery(r.opts.BasePath, "", []string{r.opts.RegistryAddr}, nil)
+		d, _ = client.NewEtcdDiscovery(r.opts.BasePath, "", []string{r.opts.RegistryAddr}, nil)
 	case "etcdv3":
-		d,_ = client.NewEtcdV3Discovery(r.opts.BasePath, "", []string{r.opts.RegistryAddr}, nil)
+		d, _ = client.NewEtcdV3Discovery(r.opts.BasePath, "", []string{r.opts.RegistryAddr}, nil)
 	case "zookeeper":
-		d,_ = client.NewZookeeperDiscovery(r.opts.BasePath, "", []string{r.opts.RegistryAddr}, nil)
+		d, _ = client.NewZookeeperDiscovery(r.opts.BasePath, "", []string{r.opts.RegistryAddr}, nil)
 	}
 
 	var sm client.SelectMode
@@ -93,13 +94,13 @@ func (r *Proxy) OnRun(closeSig chan bool) {
 
 func (r *Proxy) Call(nodeName string, servicePath string, serviceMethod string, session protocol.ISession, args *rpc.Args, reply interface{}) error {
 	if r.rpcFilter != nil {
-		r.rpcFilter.Before(servicePath + "." + serviceMethod, args)
+		r.rpcFilter.Before(servicePath+"."+serviceMethod, args)
 	}
 	r.lock.RLock()
 	err := r.rpcClient.Call(context.TODO(), nodeName, servicePath, serviceMethod, session, args, reply)
 	r.lock.RUnlock()
 	if r.rpcFilter != nil {
-		r.rpcFilter.After(servicePath + "." + serviceMethod,reply)
+		r.rpcFilter.After(servicePath+"."+serviceMethod, reply)
 	}
 	return err
 }
@@ -107,7 +108,7 @@ func (r *Proxy) Call(nodeName string, servicePath string, serviceMethod string, 
 func (r *Proxy) Go(nodeName string, servicePath string, serviceMethod string, session protocol.ISession, args *rpc.Args, reply interface{}, chanRet chan *client.Call) {
 	r.lock.RLock()
 	defer r.lock.RUnlock()
-	if _,err := r.rpcClient.Go(context.TODO(),nodeName, servicePath, serviceMethod, session, args, reply, chanRet); err != nil {
+	if _, err := r.rpcClient.Go(context.TODO(), nodeName, servicePath, serviceMethod, session, args, reply, chanRet); err != nil {
 		log.Error("rpc call error: %v", err)
 	}
 }

@@ -2,13 +2,14 @@ package connector
 
 import (
 	"context"
-	"github.com/kudoochui/kudos/log"
-	"github.com/kudoochui/kudos/rpc"
 	"runtime"
+
+	"github.com/chslink/kudos/log"
+	"github.com/chslink/kudos/rpc"
 )
 
 type SessionRemote struct {
-	connector	Connector
+	connector Connector
 }
 
 func NewSessionRemote(c Connector) *SessionRemote {
@@ -19,7 +20,7 @@ func NewSessionRemote(c Connector) *SessionRemote {
 
 func (s *SessionRemote) Bind(ctx context.Context, session *rpc.Session, args *rpc.Args, reply *rpc.Reply) error {
 	sessioinId := session.GetSessionId()
-	agent,err := s.connector.GetSessionMap().GetAgent(sessioinId)
+	agent, err := s.connector.GetSessionMap().GetAgent(sessioinId)
 	if err != nil {
 		log.Error("Bind can't find session:%s", sessioinId)
 		return nil
@@ -31,7 +32,7 @@ func (s *SessionRemote) Bind(ctx context.Context, session *rpc.Session, args *rp
 
 func (s *SessionRemote) UnBind(ctx context.Context, session *rpc.Session, args *rpc.Args, reply *rpc.Reply) error {
 	sessioinId := session.GetSessionId()
-	agent,err := s.connector.GetSessionMap().GetAgent(sessioinId)
+	agent, err := s.connector.GetSessionMap().GetAgent(sessioinId)
 	if err != nil {
 		log.Error("UnBind can't find session:%s", sessioinId)
 		return nil
@@ -43,7 +44,7 @@ func (s *SessionRemote) UnBind(ctx context.Context, session *rpc.Session, args *
 
 func (s *SessionRemote) Push(ctx context.Context, session *rpc.Session, args *rpc.Args, reply *rpc.Reply) error {
 	sessioinId := session.GetSessionId()
-	agent,err := s.connector.GetSessionMap().GetAgent(sessioinId)
+	agent, err := s.connector.GetSessionMap().GetAgent(sessioinId)
 	if err != nil {
 		log.Error("Push can't find session:%s", sessioinId)
 		return nil
@@ -56,7 +57,7 @@ func (s *SessionRemote) Push(ctx context.Context, session *rpc.Session, args *rp
 
 func (s *SessionRemote) KickBySid(ctx context.Context, session *rpc.Session, args *rpc.Args, reply *rpc.Reply) error {
 	sessioinId := session.GetSessionId()
-	agent,err := s.connector.GetSessionMap().GetAgent(sessioinId)
+	agent, err := s.connector.GetSessionMap().GetAgent(sessioinId)
 	if err != nil {
 		log.Error("KickBySid can't find session:%s", sessioinId)
 		return err
